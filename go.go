@@ -11,9 +11,7 @@ const (
 )
 
 func main() {
-
 	boardSize := 19
-	// Create 0-indexed board matrix
 	board := make([][]int, boardSize)
 	for i := range board {
 		board[i] = make([]int, boardSize)
@@ -35,10 +33,51 @@ func main() {
 			move--
 			continue
 		}
+		color := 0
 		if move%2 == 0 {
-			board[row][col] = WhiteStone
+			color = WhiteStone
 		} else {
-			board[row][col] = BlackStone
+			color = BlackStone
+		}
+		checked := make([][]bool, boardSize)
+		for i := range checked {
+			checked[i] = make([]bool, boardSize)
+		}
+		board[row][col] = color
+		libs := liberties(row, col, board, checked, color)
+		if libs == 0 {
+			fmt.Println("Invalid move (no liberties)")
+			move--
+			board[row][col] = Empty
+			continue
 		}
 	}
+}
+
+func liberties(row int, col int, board [][]int, checked [][]bool, color int) int {
+	if isOutOfBounds(row, col, board) || checked[row][col] {
+		return 0
+	}
+
+	checked[row][col] = true
+
+	if board[row][col] == Empty {
+		return 1
+	}
+
+	if board[row][col] != color {
+		return 0
+	}
+
+	count := 0
+	directions := [][]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}
+
+	for _, direction := range directions {
+		count += liberties(row+direction[0], col+direction[1], board, checked, color)
+	}
+	return count
+}
+
+func isOutOfBounds(row int, col int, board [][]int) bool {
+	return row < 0 || row >= len(board) || col < 0 || col >= len(board[row])
 }
