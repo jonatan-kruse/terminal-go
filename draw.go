@@ -25,18 +25,19 @@ func drawBoard(boardSize int, board [][]int) {
 				fmt.Print(border)
 				fmt.Print(fg)
 				if row == 0 && col != 0 && col != paddedBoardSize-1 {
-					// the number padded with spaces to be in total 2 chars
-					if col < 10 {
-						fmt.Print(" ")
-					}
-					fmt.Print(col)
+					fmt.Print(" ")
+					fmt.Print(string(rune(64 + col))) // A=65, col=1→A
 					if col == paddedBoardSize-2 {
 						fmt.Print(" ")
 					}
 				} else if row != 0 && row != paddedBoardSize-1 && col == 0 {
-					fmt.Print("  ")
-					// The letter a-z
-					fmt.Print(string(rune(97+row-1)) + " ")
+					rowNum := boardSize - row + 1
+					if rowNum < 10 {
+						fmt.Print("  ")
+					} else {
+						fmt.Print(" ")
+					}
+					fmt.Printf("%d ", rowNum)
 				} else if row != paddedBoardSize-1 {
 					fmt.Print("    ")
 				}
@@ -45,12 +46,12 @@ func drawBoard(boardSize int, board [][]int) {
 			}
 			fmt.Print(bg)
 			fmt.Print(fg)
-			if board[row-1][col-1] == WhiteStone {
+			if board[boardSize-row][col-1] == WhiteStone {
 				if col == 1 {
 					fmt.Print(" ") // Center
 				}
 				fmt.Print("⚪")
-			} else if board[row-1][col-1] == BlackStone {
+			} else if board[boardSize-row][col-1] == BlackStone {
 				if col == 1 {
 					fmt.Print(" ") // Center
 				}

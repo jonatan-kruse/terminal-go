@@ -11,7 +11,7 @@ const (
 )
 
 func main() {
-	boardSize := 9
+	boardSize := 19
 	board := make([][]int, boardSize)
 	for i := range board {
 		board[i] = make([]int, boardSize)
@@ -19,8 +19,8 @@ func main() {
 	whiteKills := 0
 	blackKills := 0
 
-	minLetter := 'a'
-	maxLetter := rune(97 + boardSize - 1)
+	minLetter := 'A'
+	maxLetter := rune(65 + boardSize - 1)
 	minNumber := 1
 	maxNumber := boardSize
 	fmt.Print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
@@ -31,13 +31,16 @@ func main() {
 		drawBoard(boardSize, board)
 		fmt.Printf("White kills: %d, Black kills: %d\n", whiteKills, blackKills)
 		fmt.Printf("Your move (%c%d-%c%d): ", minLetter, minNumber, maxLetter, maxNumber)
-		var rowLetter rune
-		var inputCol int
-		// read both the rowLetter and the inputCol together as "a1" or "d5"
-		fmt.Scanf("%c%d", &rowLetter, &inputCol)
+		var colLetter rune
+		var inputRow int
+		// read both the colLetter and the inputRow together as "A1" or "D5"
+		fmt.Scanf("%c%d", &colLetter, &inputRow)
 		fmt.Print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-		row := int(rowLetter) - 97 // a=0, b=1, etc
-		col := inputCol - 1        // convert 1-indexed input to 0-indexed
+		if colLetter >= 'a' && colLetter <= 'z' {
+			colLetter = colLetter - 32 // convert to uppercase
+		}
+		col := int(colLetter) - 65 // A=0, B=1, etc
+		row := inputRow - 1        // convert 1-indexed input to 0-indexed
 		if row < 0 || row >= boardSize || col < 0 || col >= boardSize {
 			fmt.Println("Invalid move (out of bounds)")
 			move--
@@ -73,9 +76,9 @@ func main() {
 			continue
 		}
 		if color == WhiteStone {
-			fmt.Printf("White played: %c%d\n", rowLetter, inputCol)
+			fmt.Printf("White played: %c%d\n", colLetter, inputRow)
 		} else {
-			fmt.Printf("Black played: %c%d\n", rowLetter, inputCol)
+			fmt.Printf("Black played: %c%d\n", colLetter, inputRow)
 		}
 	}
 }
