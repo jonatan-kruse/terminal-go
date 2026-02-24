@@ -11,7 +11,7 @@ const (
 )
 
 func main() {
-	boardSize := 19
+	boardSize := chooseBoardSize()
 	board := make([][]int, boardSize)
 	for i := range board {
 		board[i] = make([]int, boardSize)
